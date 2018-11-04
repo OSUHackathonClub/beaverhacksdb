@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Beaver Hacks - Teams</title>
+    <link rel="stylesheet" href="css/styles2.css">
+</head>
+<body>
+<h1><a href="index.html">Beaver Hacks</a></h1>
+<nav>
+    <ul>
+        <li><a href="registration.html">Registration</a></li>
+        <li>Teams</li>
+        <li><a href="projects.html">Projects</a></li>
+        <li><a href="admin.html">Admin</a></li>
+    </ul>
+</nav>
+<h2>Teams</h2>
+<div class="team-form">
+    <h3>Add Team</h3>
+    <p><em>If your team is new, enter a team name, or if your team has competed in a previous hackathon, select your team name from dropdown.</em></p>
+    <form action="/" method="post" enctype="application/x-www-form-urlencoded">
+        <div class="form-group">
+            <label for="name">Team Name</label>
+            <input type="text" name="teamName">
+            <label for="participant1">OR </label>
+            <select name="existingTeam" id="existingTeam">
+                <option value="">Choose Existing Team</option>
+                <option value="1">Bug Hunters</option>
+                <option value="2">Linux Legends</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <button class="submit" type="submit">Submit</button>
+        </div>
+    </form>
+</div>
+<div class=team-list>
+    <h3>Teams for Winter 2018 Hackathon</h3>
+    <hr>
+    <h4>Beaver Greats <button>Edit Team Name</button> <button>Delete Team</button></h4>
+    <ul>
+        <li>Shelley McAllen <button>Delete</button></li>
+        <li>Danny Powers <button>Delete</button></li>
+        <li>Adam Sander <button>Delete</button></li>
+    </ul>
+    <button>Add Member</button>
+    <hr>
+    <h4>The Secs <button>Edit Team Name</button> <button>Delete Team</button></h4>
+    <ul>
+        <li>Kelly von Borstel <button>Delete</button></li>
+        <li>Vinny Harris-Riviello <button>Delete</button></li>
+    </ul>
+    <button>Add Member</button>
+    <hr>
+    <h4>Cosmic Coders <button>Edit Team Name</button> <button>Delete Team</button></h4>
+    <ul>
+        <li>Tim Hardy <button>Delete</button></li>
+        <li>Alex Chen <button>Delete</button></li>
+        <li>Silvia Smith <button>Delete</button></li>
+        <li>Jane Doe <button>Delete</button></li>
+    </ul>
+</div>
+</body>
+</html>

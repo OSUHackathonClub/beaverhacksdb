@@ -1,0 +1,120 @@
+
+body {
+  font-size: 13px;
+  margin: 30px;
+  font-family: Verdana, sans-serif;
+  color: grey;
+  max-width: 600px;
+}
+
+h1 {
+  margin-bottom: 15px;
+}
+
+nav li {
+  display: inline-block;
+  margin: 0 10px;
+  text-decoration: none;
+}
+
+nav {
+  max-width: 650px;
+}
+
+h2 {
+  font-size: 1.7em;
+  color: orange;
+  margin: 40px 0 20px;
+}
+
+h3 {
+  font-size: 1.2em;
+  color: #000;
+}
+
+table {
+  margin: 10px 0 50px;
+}
+
+th,
+td {
+  padding: 5px 20px 5px 0;
+  text-align: left;
+}
+
+.formName {
+  font-weight: bold;
+}
+
+.form-group {
+  margin-bottom: 5px;
+}
+
+.submit {
+  margin-bottom: 20px;
+}
+
+.table {
+
+}
+
+/* Registration Form */
+.registration-form .form-group  .cancel-edit-button {
+  visibility: hidden;
+}
+
+.participant-table tr th:first-child {
+  display: none;
+}
+.participant-table tr td:first-child {
+  display: none;
+}
+
+/* Update Form */
+#participant-update-form .id-hidden {
+  display: none;
+}
+
+/* Modal Edit View */
+.modal {
+  display: none; /* Hidden by default */
+  position: fixed; /* Stay in place */
+  z-index: 1; /* Sit on top */
+  padding-top: 100px; /* Location of the box */
+  left: 0;
+  top: 0;
+  width: 100%; /* Full width */
+  height: 100%; /* Full height */
+  overflow: auto; /* Enable scroll if needed */
+  background-color: rgb(0,0,0); /* Fallback color */
+  background-color: rgba(0,0,0,0.7); /* Black w/ opacity */
+}
+
+/* Modal Content */
+.modal-content {
+  background-color: #fefefe;
+  margin: auto;
+  padding: 20px;
+  border: 1px solid #888;
+  width: 80%;
+}
+
+/* The Close Button */
+.close {
+  color: #aaaaaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+  color: #000;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+a {
+  color: #00B7FF;
+}
+

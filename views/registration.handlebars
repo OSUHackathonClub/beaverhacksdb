@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Beaver Hacks - Registration</title>
+    <link rel="stylesheet" href="css/styles2.css">
+</head>
+<body>
+<h1><a href="index.html">Beaver Hacks</a></h1>
+<nav>
+    <ul>
+        <li>Registration</li>
+        <li><a href="teams.html">Teams</a></li>
+        <li><a href="projects.html">Projects</a></li>
+        <li><a href="admin.html">Admin</a></li>
+    </ul>
+</nav>
+<h2>Registration</h2>
+<div class="registration-form">
+    <h3>Add Participant</h3>
+    <form action="/" method="post" enctype="application/x-www-form-urlencoded">
+        <div class="form-group">
+            <label for="firstName">First Name</label>
+            <input type="text" name="firstName">
+        </div>
+        <div class="form-group">
+            <label for="lastName">Last Name</label>
+            <input type="text" name="lastName">
+        </div>
+        <div class="form-group">
+            <label for="email">Email</label>
+            <input type="email" name="email">
+        </div>
+        <div class="form-group">
+            <button type="submit" id="add-participant-button">submit</button>
+        </div>
+        <div class="form-group">
+            <button type="button" class="cancel-edit-button" id="cancel-editing-participant">cancel</button>
+        </div>
+    </form>
+</div>
+<br>
+<div class=list id="participant-list">
+    <h3>Participants</h3>
+    <form action="/" method="post">
+        <div class="form-group">
+            <label for="hackathon">Filter by hackathon</label>
+            <select name="term" id="term">
+                <option value="">Choose Hackathon</option>
+                <option value="winter">Winter 2018</option>
+                <option value="fall">Fall 2018</option>
+                <option value="summer">Summer 2018</option>
+            </select>
+        </div>
+    </form>
+    <br><hr>
+    <table class="participant-table" id="">
+        <thead>
+        <tr>
+            <th class="id-hidden">Id</th>
+            <th>First Name</th>
+            <th>Last Name</th>
+            <th>Email</th>
+        </tr>
+        </thead>
+        <tbody class="participant-table-body" id="participant-table-body"></tbody>
+    </table>
+</div>
+
+<!-- The Modal -->
+<div id="update-modal" class="modal">
+
+    <!-- Modal content -->
+    <div class="modal-content">
+        <span class="close">&times;</span>
+        <!-- Update Form -->
+        <h3>Update Participant</h3>
+        <form id="participant-update-form"  action="/" method="post" enctype="application/x-www-form-urlencoded">
+            <div class="id-hidden">
+                <label for="participantId">Id</label>
+                <input type="text" name="participantId" id="update-participant-id">
+            </div>
+            <div class="form-group">
+                <label for="firstName">First Name</label>
+                <input type="text" name="firstName" id="update-firstname">
+            </div>
+            <div class="form-group">
+                <label for="lastName">Last Name</label>
+                <input type="text" name="lastName" id="update-lastname">
+            </div>
+            <div class="form-group">
+                <label for="email">Email</label>
+                <input type="email" name="email" id="update-email">
+            </div>
+            <div class="form-group">
+                <button class="form-button" onclick="getFormData()">Save</button>
+            </div>
+        </form>
+    </div>
+
+</div>
+<!--javascript-->
+<script src="javascript/script.js"></script>
+</body>
+</html>

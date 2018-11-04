@@ -1,0 +1,18 @@
+<h1>{{title}}</h1>
+
+<h3>{{queryTitle}}</h3>
+<ul>
+    {{#each queryList}}
+    <li>{{this.name}}: {{this.value}}
+    {{/each}}
+</ul>
+<br>
+
+<h3>{{formTitle}}</h3>
+{{>form}}
+<br>
+<h3>{{tableTitle}}</h3>
+{{>table}}
+
+<script src='/js/script.js'></script>
+<script src="/js/tableHelper.js"><{{!}}/script>

@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Beaver Hacks - Admin</title>
+    <link rel="stylesheet" href="css/styles2.css">
+</head>
+<body>
+<h1><a href="index.html">Beaver Hacks</a></h1>
+<nav>
+    <ul>
+        <li><a href="registration.html">Registration</a></li>
+        <li><a href="teams.html">Teams</a></li>
+        <li><a href="projects.html">Projects</a></li>
+        <li>Admin</li>
+    </ul>
+</nav>
+<h2>Admin</h2>
+<div class="add_hackathon_form">
+    <h3>Add Hackathon</h3>
+    <form action="/" method="post" enctype="application/x-www-form-urlencoded">
+        <div class="form-group">
+            <label for="term">Term</label>
+            <select name="term" id="term">
+                <option value="">Choose Term</option>
+                <option value="winter">Winter</option>
+                <option value="spring">Spring</option>
+                <option value="summer">Summer</option>
+                <option value="fall">Fall</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="year">Year</label>
+            <select name="year" id="year">
+                <option value="">Choose Year</option>
+                <option value="2018">2018</option>
+                <option value="2019">2019</option>
+                <option value="2020">2020</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <button type="submit">Submit</button>
+        </div>
+    </form>
+</div>
+<br>
+<div class="set_current_hackathon_form">
+    <h3>Set Current Hackathon</h3>
+    <form action="/" method="post" enctype="application/x-www-form-urlencoded">
+        <div class="form-group">
+            <label for="term">Term</label>
+            <select name="term" id="term">
+                <option value="">Choose Term</option>
+                <option value="winter">Winter</option>
+                <option value="spring">Spring</option>
+                <option value="summer">Summer</option>
+                <option value="fall">Fall</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="year">Year</label>
+            <select name="year" id="year">
+                <option value="">Choose Year</option>
+                <option value="2018">2018</option>
+                <option value="2019">2019</option>
+                <option value="2020">2020</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <button type="submit">Submit</button>
+        </div>
+    </form>
+</div>
+<br>
+<h3>Hackathons</h3>
+<hr>
+<table class="table" id="hackathonTable">
+    <thead>
+    <tr>
+        <th>Term</th>
+        <th>Year</th>
+        <th></th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+        <td>Winter</td>
+        <td>2018</td>
+        <td>
+            <button>Delete</button>
+        </td>
+    </tr>
+    <tr>
+        <td>Fall</td>
+        <td>2018</td>
+        <td>
+            <button>Delete</button>
+        </td>
+    </tr>
+    <tr>
+        <td>Spring</td>
+        <td>2018</td>
+        <td>
+            <button>Delete</button>
+        </td>
+    </tr>
+    </tbody>
+</table>
+</body>
+</html>
