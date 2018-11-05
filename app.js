@@ -2,7 +2,7 @@ var express = require('express');
 var app = express();
 var handlebars = require('express-handlebars').create({defaultLayout:'main'});
 var bodyParser = require('body-parser');
-var mysql = require('./dbcon.js');
+
 
 app.use(bodyParser.json()); // for parsing application/json
 app.use(bodyParser.urlencoded({extended: true }));
@@ -10,24 +10,12 @@ app.use(express.static('public'));
 
 app.engine('handlebars', handlebars.engine);
 app.set('view engine', 'handlebars');
+var mysql = require('./dbcon.js');
 app.set('port', 62333);
 
 
 app.get('/',function(req,res){
-
-    var title = "Workout Tracker";
-
-    var formTitle = "Exercise Form";
-    var tableTitle = "Exercise Records";
-
-    var context = {};
-    context.title = title;
-    context.formTitle = formTitle;
-    context.tableTitle = tableTitle;
-
-    // send table
-
-
+    let context = {};
     res.render('home', context);
 });
 
@@ -48,136 +36,116 @@ app.get('/reset-table',function(req,res,next){
     });
 });
 
+/*
+var express = require('express');
+var router = express.Router();
+//var currentHackathon;
+*/
 
-app.get('/load', function (req, res) {
-    console.log("server side load");
-    mysql.pool.query('SELECT * FROM workouts ORDER BY id', function(err, rows, fields) {
-        if (err) {
-
-            next(err);
-            return;
+function getParticipants(res, mysql, context, complete){
+    mysql.pool.query("SELECT id, name FROM bsg_planets", function(error, results, fields){
+        if(error){
+            res.write(JSON.stringify(error));
+            res.end();
         }
-        //console.log(rows);
-        res.send(rows);
+        context.planets  = results;
+        complete();
     });
-});
+}
 
-app.get('/insert', function(req,res){
-    var context = {};
 
-    console.log("server side post, ready to process mysql");
-
-    mysql.pool.query("INSERT INTO workouts (`name`, `reps`, `weight`, `date`, `lbs`) VALUES (?, ?, ?, ?, ?)", [req.headers.name, req.headers.reps, req.headers.weight, req.headers.day,  req.headers.lbs], function(err, result) {
-        if (err) {
-            next(err);
-            return;
+function getCurrentHackathon(res, mysql, context, complete) {
+    mysql.pool.query("SELECT id, term, year FROM hackathon WHERE currentHackathon = 1", function(error, results, fields){
+        if(error){
+            res.write(JSON.stringify(error));
+            res.end();
         }
-
-        context.id = result.insertId;
-        context.status = 201;
+        currentHackathon = results;
+        context.hackathon  = results;
+        complete();
     });
-
-    //get row
-    mysql.pool.query('SELECT * FROM workouts ORDER BY id DESC LIMIT 1', function(err, rows, fields){
-        if(err){
-
-            next(err);
-            return;
-        }
-
-        //send the information back to client
-        context.response = rows[rows.length-1];
-
-        res.send(context);
-
-    });
-
-});
+}
 
 
-app.get('/delete', function(req,res) {
-    var context = {};
+/*Display all people. Requires web based javascript to delete users with AJAX*/
 
-    console.log("server side delete, ready to delete from mysql");
+    app.get('/registration', function(req, res){
+        console.log("hello your are calling me");
+        var callbackCount = 0;
+        var context = {};
+        var mysql = req.app.get('mysql');
+        getParticipants(res,context,complete());
+        getCurrentHackathon(res, context, complete());
 
-    mysql.pool.query("DELETE FROM workouts WHERE id=?", [req.headers.id], function(err, result){
-        if(err){
-            next(err);
-            return;
-        }
-        res.send(result);
-    });
-});
-
-app.post('/edit', function(req,res,next){
-    console.log("server side preparing edit page");
-    console.log(req.body);
-    var context = {};
-
-    mysql.pool.query('SELECT * FROM workouts WHERE id =?',[req.body.id],function(err, rows, fields){
-        if(err){
-            next(err);
-            return;
-        }
-
-        context.response = rows[rows.length-1];
-
-        var date = JSON.stringify(context.response.date);
-
-        context.date = date;
-        res.render('edit', context);
-    });
-});
-
-/* for testing only */
-app.post('/edit-form', function (req, res) {
-    var context = {};
-    context.title = "Edit Form";
-    context.name = "";
-    context.id = req.body.id;
-    context.reps = "";
-    context.weight = "";
-    context.date = "2018-07-07";
-    context.lbs = 0;
-
-    res.render('edit', context);
-});
-
-/* process update of table and sql after edit form */
-app.post('/update', function (req, res) {
-    console.log("server side update data ready for mysql");
-    var lbs = 1;
-    if (req.body.unit !== "lbs") {
-        lbs = 0;
-    }
-
-    mysql.pool.query("UPDATE workouts SET name=?, reps=?, weight=?, date=?, lbs=? WHERE id=?",
-        [req.body.name, req.body.reps, req.body.weight, req.body.date, lbs, req.body.id],
-        function(err, result){
-            if(err){
-                next(err);
-                return;
+        function complete(){
+            callbackCount++;
+            if(callbackCount >= 0){
+                res.render('registration', context);
             }
-            console.log("Row updated. redirecting to home");
-            res.redirect('/');
+        }
+    });
+
+
+/* Adds a participant, redirects to the people page after adding */
+
+    app.post('/participant', function addParticipant(req, res) {
+        var mysql = req.app.get('mysql');
+        var sql = "INSERT INTO participant(firstName, lastName, email) VALUES (?,?,?)";
+        var inserts = [req.body.firstName, req.body.lastName, req.body.email];
+        sql = mysql.pool.query(sql,inserts,function(error, results, fields){
+            if(error){
+                res.write(JSON.stringify(error));
+                res.end();
+            }else{
+                //res.redirect('/people');
+                console.log(results);
+                res.send(true);
+            }
         });
+    });
+
+app.post('/participantHackathon', function(req, res){
+    console.log("We get the multi-select certificate dropdown as ", req.body.hid);
+    var mysql = req.app.get('mysql');
+    // let's get out the certificates from the array that was submitted by the form
+    var hackathon = req.body.hid;
+    var participant = req.body.pid;
+    console.log("Processing hackathon id " + hackathon);
+    var sql = "INSERT INTO bsg_cert_people (pid, cid) VALUES (?,?)";
+    var sql = "INSERT INTO participantHackathon(participantId, hackathonId) VALUES (?, ?)";
+    var inserts = [participant, hackathon];
+    sql = mysql.pool.query(sql, inserts, function(error, results, fields){
+        if(error){
+            //TODO: send error messages to frontend as the following doesn't work
+            /*
+            res.write(JSON.stringify(error));
+            res.end();
+            */
+
+            console.log(error)
+        }
+    });
+    res.redirect('/people_certs');
 });
+
+
+
 
 app.use(function(req,res){
-    res.status(404);
-    res.render('404');
+res.status(404);
+res.render('404');
 });
 
 app.use(function(err, req, res, next){
-    console.error(err.stack);
-    res.type('plain/text');
-    res.status(500);
-    res.render('500');
+console.error(err.stack);
+res.type('plain/text');
+res.status(500);
+res.render('500');
 });
 
 
 app.listen(app.get('port'), function(){
-    console.log('Express started on http://localhost:' + app.get('port') + '; press Ctrl-C to terminate.');
+console.log('Express started on http://localhost:' + app.get('port') + '; press Ctrl-C to terminate.');
 });
 
 
