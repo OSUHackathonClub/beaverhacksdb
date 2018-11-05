@@ -23,7 +23,7 @@ app.get('/',function(req,res){
 
 app.get('/reset-table',function(req,res,next){
     var context = {};
-    mysql.pool.query("DROP TABLE IF EXISTS workouts", function(err){ //replace your connection pool with the your variable containing the connection pool
+    mysql.query("DROP TABLE IF EXISTS workouts", function(err){ //replace your connection pool with the your variable containing the connection pool
         var createString = "CREATE TABLE workouts("+
             "id INT PRIMARY KEY AUTO_INCREMENT,"+
             "name VARCHAR(255) NOT NULL,"+
@@ -31,7 +31,7 @@ app.get('/reset-table',function(req,res,next){
             "weight INT,"+
             "date DATE,"+
             "lbs BOOLEAN)";
-        mysql.pool.query(createString, function(err){
+        mysql.query(createString, function(err){
             context.results = "Table reset";
             res.render('home',context);
         })
@@ -45,7 +45,7 @@ var router = express.Router();
 */
 
 function getParticipants(res, mysql, context, complete){
-    mysql.pool.query("SELECT id, name FROM bsg_planets", function(error, results, fields){
+    mysql.query("SELECT id, name FROM bsg_planets", function(error, results, fields){
         if(error){
             res.write(JSON.stringify(error));
             res.end();
@@ -57,7 +57,7 @@ function getParticipants(res, mysql, context, complete){
 
 
 function getCurrentHackathon(res, mysql, context, complete) {
-    mysql.pool.query("SELECT id, term, year FROM hackathon WHERE currentHackathon = 1", function(error, results, fields){
+    mysql.query("SELECT id, term, year FROM hackathon WHERE currentHackathon = 1", function(error, results, fields){
         if(error){
             res.write(JSON.stringify(error));
             res.end();
@@ -94,7 +94,7 @@ function getCurrentHackathon(res, mysql, context, complete) {
         var mysql = req.app.get('mysql');
         var sql = "INSERT INTO participant(firstName, lastName, email) VALUES (?,?,?)";
         var inserts = [req.body.firstName, req.body.lastName, req.body.email];
-        sql = mysql.pool.query(sql,inserts,function(error, results, fields){
+        sql = mysql.query(sql,inserts,function(error, results, fields){
             if(error){
                 res.write(JSON.stringify(error));
                 res.end();
@@ -116,7 +116,7 @@ app.post('/participantHackathon', function(req, res){
     var sql = "INSERT INTO bsg_cert_people (pid, cid) VALUES (?,?)";
     var sql = "INSERT INTO participantHackathon(participantId, hackathonId) VALUES (?, ?)";
     var inserts = [participant, hackathon];
-    sql = mysql.pool.query(sql, inserts, function(error, results, fields){
+    sql = mysql.query(sql, inserts, function(error, results, fields){
         if(error){
             //TODO: send error messages to frontend as the following doesn't work
             /*
