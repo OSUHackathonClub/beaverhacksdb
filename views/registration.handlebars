@@ -1,11 +1,4 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Beaver Hacks - Registration</title>
-    <link rel="stylesheet" href="css/styles2.css">
-</head>
-<body>
+
 <h1><a href="index.html">Beaver Hacks</a></h1>
 <nav>
     <ul>
@@ -18,7 +11,7 @@
 <h2>Registration</h2>
 <div class="registration-form">
     <h3>Add Participant</h3>
-    <form action="/" method="post" enctype="application/x-www-form-urlencoded">
+    <form action="/participant" method="post" enctype="application/x-www-form-urlencoded">
         <div class="form-group">
             <label for="firstName">First Name</label>
             <input type="text" name="firstName">
@@ -57,13 +50,28 @@
     <table class="participant-table" id="">
         <thead>
         <tr>
-            <th class="id-hidden">Id</th>
+            <th hidden>Id</th>
             <th>First Name</th>
             <th>Last Name</th>
             <th>Email</th>
         </tr>
         </thead>
-        <tbody class="participant-table-body" id="participant-table-body"></tbody>
+        <tbody class="participant-table-body" id="participant-table-body" onload="loadParticipants()">
+        {{#each results}}
+            <tr id="{{data}}">
+                <!-- Import data -->
+                <td hidden>{{id}} </td>
+                <td>{{firstName}}</td>
+                <td>{{lastName}}</td>
+                <td>{{email}}</td>
+                <form>
+                    <input type="button" value="deleteBtn" onclick="deleteParticipant(this)" />
+                    <input type="button" value="editBtn" onclick="updateParticipantData(this)" />
+                </form>
+            </tr>
+        {{/each}}
+
+        </tbody>
     </table>
 </div>
 
@@ -100,6 +108,5 @@
 
 </div>
 <!--javascript-->
-<script src="javascript/script.js"></script>
-</body>
-</html>
+<script src='/public/javascripts/script.js'></script>
+

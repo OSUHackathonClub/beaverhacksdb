@@ -46,12 +46,13 @@ var router = express.Router();
 */
 
 function getParticipants(res, mysql, context, complete){
-    mysql.pool.query("SELECT id, name FROM bsg_planets", function(error, results, fields){
+    mysql.pool.query("SELECT id, firstName, lastName, email FROM participants", function(error, results, fields){
         if(error){
             res.write(JSON.stringify(error));
             res.end();
         }
-        context.planets  = results;
+        console.log(results);
+        context.participants  = results;
         complete();
     });
 }
@@ -64,8 +65,12 @@ function getCurrentHackathon(res, mysql, context, complete) {
             res.write(JSON.stringify(error));
             res.end();
         }
+        console.log(results);
         currentHackathon = results;
-        context.hackathon  = results;
+        context.hackathonTerm  = results.term;
+        context.hackathonId = results.id;
+        context.year = results.year;
+
         complete();
     });
 }
@@ -73,43 +78,61 @@ function getCurrentHackathon(res, mysql, context, complete) {
 
 /*Display all people. Requires web based javascript to delete users with AJAX*/
 
-    app.get('/registration', function(req, res){
-        /*
-        console.log("hello your are calling me");
-        var callbackCount = 0;
-        //var context = {};
-        var mysql = req.app.get('mysql');
-        getParticipants(res,context,complete());
-        getCurrentHackathon(res, context, complete());
+app.get('/registration', function(req, res){
 
-        function complete(){
-            callbackCount++;
-            if(callbackCount >= 0){
-                res.render('registration', context);
-            }
-        } */
-        let context = {};
-        res.render('registration', context);
+    console.log("hello your are calling me");
+    var callbackCount = 0;
+    var context = {};
+    var mysql = req.app.get('mysql');
+    getParticipants(res,mysql, context,complete());
+    getCurrentHackathon(res, mysql, context, complete());
+
+    function complete(){
+        callbackCount++;
+        if(callbackCount >= 2){
+            res.render('registration', context);
+        }
+    }
+    //let context = {};
+    res.render('registration', context);
+});
+
+app.get('/registration', function(req,res){
+    var context = {};
+    mysql.query('SELECT Name, Location, Prize FROM Tournament', function(err, rows){
+        if(err)
+            console.log(err);
+        mysql.query('SELECT Name, Id FROM Team', function(err, moreRows){
+            if(err)
+                console.log(err);
+            context.tournament = rows;
+            context.team = moreRows;
+            context.TournamentsActive = "active";
+            res.render('tournaments', context)
+        });
     });
+});
 
 
 /* Adds a participant, redirects to the people page after adding */
 
-    app.post('/participant', function addParticipant(req, res) {
-        var mysql = req.app.get('mysql');
-        var sql = "INSERT INTO participant(firstName, lastName, email) VALUES (?,?,?)";
-        var inserts = [req.body.firstName, req.body.lastName, req.body.email];
-        sql = mysql.query(sql,inserts,function(error, results, fields){
-            if(error){
-                res.write(JSON.stringify(error));
-                res.end();
-            }else{
-                //res.redirect('/people');
-                console.log(results);
-                res.send(true);
-            }
-        });
+app.post('/participant', function addParticipant(req, res) {
+    var mysql = req.app.get('mysql');
+    var sql = "INSERT INTO participant(firstName, lastName, email) VALUES (?,?,?)";
+    var inserts = [req.body.firstName, req.body.lastName, req.body.email];
+    sql = mysql.query(sql,inserts,function(error, results, fields){
+        if(error){
+            res.write(JSON.stringify(error));
+            res.end();
+        }else{
+            //res.redirect('/people');
+            console.log(results);
+            res.send(true);
+        }
     });
+});
+
+
 
 app.post('/participantHackathon', function(req, res){
     console.log("We get the multi-select certificate dropdown as ", req.body.hid);
@@ -118,21 +141,34 @@ app.post('/participantHackathon', function(req, res){
     var hackathon = req.body.hid;
     var participant = req.body.pid;
     console.log("Processing hackathon id " + hackathon);
-    var sql = "INSERT INTO bsg_cert_people (pid, cid) VALUES (?,?)";
     var sql = "INSERT INTO participantHackathon(participantId, hackathonId) VALUES (?, ?)";
     var inserts = [participant, hackathon];
     sql = mysql.query(sql, inserts, function(error, results, fields){
         if(error){
             //TODO: send error messages to frontend as the following doesn't work
-            /*
-            res.write(JSON.stringify(error));
-            res.end();
-            */
-
             console.log(error)
         }
     });
-    res.redirect('/people_certs');
+});
+
+
+
+app.get('/reset-participant',function(req,res,next){
+    var context = {};
+    mysql.pool.query("DROP TABLE IF EXISTS participant", function(err){ //replace your connection pool with the your variable containing the connection pool
+        var createString = "CREATE TABLE participant (\n" +
+            "        id INT(11) NOT NULL AUTO_INCREMENT,\n" +
+            "        firstName VARCHAR(100) NOT NULL,\n" +
+            "        lastName VARCHAR(100) NOT NULL,\n" +
+            "        email VARCHAR(100) NOT NULL,\n" +
+            "        PRIMARY KEY (id)\n" +
+            ") ENGINE=InnoDB;";
+        mysql.pool.query(createString, function(err){
+            context.results = "Table reset";
+            console.log("new particpant table, fresh and clean");
+            res.render('registration',context);
+        })
+    });
 });
 
 

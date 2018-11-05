@@ -18,6 +18,7 @@ function configureCurrentHackathon(currentHackathon) {
     let title = list.childNodes[1];
     title.textContent = "Participants for " + currentHackathon + " Hackathon";
     currentHackathonParticipants = getParticipants();
+    console.log("populating");
     populateParticipantTable(currentHackathonParticipants);
 }
 
