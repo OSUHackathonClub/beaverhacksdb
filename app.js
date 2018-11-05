@@ -81,8 +81,8 @@ app.get('/registration', function(req, res){
     var context = {};
     var mysql = req.app.get('mysql');
     getParticipants(res,mysql, context,complete());
-    getCurrentHackathon(res, mysql, context, complete());
-
+    //getCurrentHackathon(res, mysql, context, complete());
+    context.tableTitle = "Participants Winter 2018";
     function complete(){
         callbackCount++;
         if(callbackCount >= 2){

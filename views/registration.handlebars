@@ -34,7 +34,7 @@
 </div>
 <br>
 <div class=list id="participant-list">
-    <h3>Participants</h3>
+    <h3>{{tableTitle}}</h3>
     <form action="/" method="post">
         <div class="form-group">
             <label for="hackathon">Filter by hackathon</label>
@@ -60,10 +60,10 @@
         {{#each results}}
             <tr id="{{data}}">
                 <!-- Import data -->
-                <td hidden>{{id}} </td>
-                <td>{{firstName}}</td>
-                <td>{{lastName}}</td>
-                <td>{{email}}</td>
+                <td hidden>{{thos.id}} </td>
+                <td>{{this.firstName}}</td>
+                <td>{{this.lastName}}</td>
+                <td>{{this.email}}</td>
                 <form>
                     <input type="button" value="deleteBtn" onclick="deleteParticipant(this)" />
                     <input type="button" value="editBtn" onclick="updateParticipantData(this)" />
