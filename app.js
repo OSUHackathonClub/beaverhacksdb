@@ -75,39 +75,22 @@ function getCurrentHackathon(res, mysql, context, complete) {
 /*Display all people. Requires web based javascript to delete users with AJAX*/
 
 app.get('/registration', function(req, res){
-
     console.log("hello your are calling me");
-    var callbackCount = 0;
     var context = {};
-    var mysql = req.app.get('mysql');
-    getParticipants(res,mysql, context,complete());
-    //getCurrentHackathon(res, mysql, context, complete());
-    context.tableTitle = "Participants Winter 2018";
-    function complete(){
-        callbackCount++;
-        if(callbackCount >= 2){
-            res.render('registration', context);
+    mysql.pool.query("SELECT id, firstName, lastName, email FROM participants", function(error, results, fields){
+        if(error){
+            res.write(JSON.stringify(error));
+            res.end();
         }
-    }
-    //let context = {};
-    res.render('registration', context);
-});
+        //here call hackathon for id when you have the table setup
 
-app.get('/registration', function(req,res){
-    var context = {};
-    mysql.query('SELECT Name, Location, Prize FROM Tournament', function(err, rows){
-        if(err)
-            console.log(err);
-        mysql.query('SELECT Name, Id FROM Team', function(err, moreRows){
-            if(err)
-                console.log(err);
-            context.tournament = rows;
-            context.team = moreRows;
-            context.TournamentsActive = "active";
-            res.render('tournaments', context)
-        });
+        context.tableTitle = "Participants Winter 2018";
+        console.log(results);
+        context.participants  = results;
+        res.render('registration', context);
     });
 });
+
 
 
 /* Adds a participant, redirects to the people page after adding */
