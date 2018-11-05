@@ -14,5 +14,5 @@ pool.getConnection(function(err) {
     console.log("Connected!");
 });
 
-module.exports = pool;
+module.exports.pool = pool;
 

@@ -1,8 +1,9 @@
 var express = require('express');
+var mysql = require('./dbcon.js');
 var app = express();
 var handlebars = require('express-handlebars').create({defaultLayout:'main'});
 var bodyParser = require('body-parser');
-var mysql = require('./dbcon.js');
+
 
 
 app.use(bodyParser.json()); // for parsing application/json
@@ -12,7 +13,7 @@ app.use(express.static('public'));
 app.engine('handlebars', handlebars.engine);
 app.set('view engine', 'handlebars');
 
-app.set('mysql', mysql);
+//app.set('mysql', mysql);
 app.set('port', 62333);
 
 
@@ -23,7 +24,7 @@ app.get('/',function(req,res){
 
 app.get('/reset-table',function(req,res,next){
     var context = {};
-    mysql.query("DROP TABLE IF EXISTS workouts", function(err){ //replace your connection pool with the your variable containing the connection pool
+    mysql.pool.query("DROP TABLE IF EXISTS workouts", function(err){ //replace your connection pool with the your variable containing the connection pool
         var createString = "CREATE TABLE workouts("+
             "id INT PRIMARY KEY AUTO_INCREMENT,"+
             "name VARCHAR(255) NOT NULL,"+
@@ -45,7 +46,7 @@ var router = express.Router();
 */
 
 function getParticipants(res, mysql, context, complete){
-    mysql.query("SELECT id, name FROM bsg_planets", function(error, results, fields){
+    mysql.pool.query("SELECT id, name FROM bsg_planets", function(error, results, fields){
         if(error){
             res.write(JSON.stringify(error));
             res.end();
@@ -57,7 +58,8 @@ function getParticipants(res, mysql, context, complete){
 
 
 function getCurrentHackathon(res, mysql, context, complete) {
-    mysql.query("SELECT id, term, year FROM hackathon WHERE currentHackathon = 1", function(error, results, fields){
+
+    mysql.pool.query("SELECT id, term, year FROM hackathon WHERE currentHackathon = 1", function(error, results, fields){
         if(error){
             res.write(JSON.stringify(error));
             res.end();
@@ -72,9 +74,10 @@ function getCurrentHackathon(res, mysql, context, complete) {
 /*Display all people. Requires web based javascript to delete users with AJAX*/
 
     app.get('/registration', function(req, res){
+        /*
         console.log("hello your are calling me");
         var callbackCount = 0;
-        var context = {};
+        //var context = {};
         var mysql = req.app.get('mysql');
         getParticipants(res,context,complete());
         getCurrentHackathon(res, context, complete());
@@ -84,7 +87,9 @@ function getCurrentHackathon(res, mysql, context, complete) {
             if(callbackCount >= 0){
                 res.render('registration', context);
             }
-        }
+        } */
+        let context = {};
+        res.render('registration', context);
     });
 
 
