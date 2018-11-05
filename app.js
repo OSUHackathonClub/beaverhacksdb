@@ -2,7 +2,7 @@ var express = require('express');
 var app = express();
 var handlebars = require('express-handlebars').create({defaultLayout:'main'});
 var bodyParser = require('body-parser');
-var mysql = require('/dbcon.js');
+var mysql = require('./dbcon.js');
 
 
 app.use(bodyParser.json()); // for parsing application/json
