@@ -77,7 +77,7 @@ function getCurrentHackathon(res, mysql, context, complete) {
 app.get('/registration', function(req, res){
     console.log("hello your are calling me");
     var context = {};
-    mysql.pool.query("SELECT id, firstName, lastName, email FROM participants", function(error, results, fields){
+    mysql.pool.query("SELECT id, firstName, lastName, email FROM participant", function(error, results, fields){
         if(error){
             res.write(JSON.stringify(error));
             res.end();
