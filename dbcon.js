@@ -7,4 +7,12 @@ var pool = mysql.createPool({
     database        : 'cs340_harrisrv'
 });
 
+pool.getConnection(function(err) {
+    if (err) {
+        throw err;
+    }
+    console.log("Connected!");
+});
+
 module.exports.pool = pool;
+
