@@ -22,28 +22,24 @@ app.get('/',function(req,res){
     res.render('home', context);
 });
 
-app.get('/reset-table',function(req,res,next){
+app.get('/reset-participant',function(req,res,next){
     var context = {};
-    mysql.pool.query("DROP TABLE IF EXISTS workouts", function(err){ //replace your connection pool with the your variable containing the connection pool
-        var createString = "CREATE TABLE workouts("+
-            "id INT PRIMARY KEY AUTO_INCREMENT,"+
-            "name VARCHAR(255) NOT NULL,"+
-            "reps INT,"+
-            "weight INT,"+
-            "date DATE,"+
-            "lbs BOOLEAN)";
-        mysql.query(createString, function(err){
+    mysql.pool.query("DROP TABLE IF EXISTS participant", function(err){ //replace your connection pool with the your variable containing the connection pool
+        var createString = " CREATE TABLE participant (\n" +
+            "    id INT(11) NOT NULL AUTO_INCREMENT,\n" +
+            "    firstName VARCHAR(100) NOT NULL,\n" +
+            "    lastName VARCHAR(100) NOT NULL,\n" +
+            "    email VARCHAR(100) NOT NULL,\n" +
+            "    PRIMARY KEY (id)\n" +
+            ") ENGINE=InnoDB;";
+        mysql.pool.query(createString, function(err){
             context.results = "Table reset";
-            res.render('home',context);
+            res.render('registration',context);
         })
     });
 });
 
-/*
-var express = require('express');
-var router = express.Router();
-//var currentHackathon;
-*/
+
 
 function getParticipants(res, mysql, context, complete){
     mysql.pool.query("SELECT id, firstName, lastName, email FROM participants", function(error, results, fields){
