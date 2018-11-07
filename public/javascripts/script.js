@@ -1,7 +1,9 @@
 /** Registration Page Script**/
 
 // is current hackathon an attribute? how do we make it persist
-var currentHackathon = "Winter 2018";
+
+
+
 var currentHackathonParticipants = [];
 
 var modal = document.getElementById('update-modal');
@@ -11,6 +13,23 @@ document.addEventListener('DOMContentLoaded', configureCurrentHackathon(currentH
 document.addEventListener('DOMContentLoaded', bindModalElements);
 
 //document.addEventListener('DOMContentLoaded', bindButtons);
+
+class Participant {
+    constructor(fName, lName, email) {
+        this.firstName = fName;
+        this.lastName = lName;
+        this.email = email;
+    }
+}
+
+function addParticipant(formData) {
+    console.log("submit add participant button clicked");
+    let table = document.getElementById('participant-table-body');
+    let newIndex = table.rows.length;
+    const participant = new Participant(formData.firstName, formData.lastName, formData.email);
+    createRow(participant, newIndex);
+}
+
 
 
 function configureCurrentHackathon(currentHackathon) {

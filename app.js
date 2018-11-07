@@ -95,8 +95,10 @@ app.get('/registration', function(req, res){
 
 /* Adds a participant, redirects to the people page after adding */
 
-app.post('/participant', function addParticipant(req, res) {
+app.post('/participant', function (req, res) {
+    console.log("receibing participant data" + req.body);
     var mysql = req.app.get('mysql');
+    console.log(req.body);
     var sql = "INSERT INTO participant(firstName, lastName, email) VALUES (?,?,?)";
     var inserts = [req.body.firstName, req.body.lastName, req.body.email];
     sql = mysql.query(sql,inserts,function(error, results, fields){
