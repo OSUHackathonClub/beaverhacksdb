@@ -14,7 +14,7 @@ app.engine('handlebars', handlebars.engine);
 app.set('view engine', 'handlebars');
 
 //app.set('mysql', mysql);
-app.set('port', 62333);
+app.set('port', 62233);
 
 
 app.get('/',function(req,res){
@@ -96,7 +96,8 @@ app.get('/registration', function(req, res){
 /* Adds a participant, redirects to the people page after adding */
 
 app.post('/participant', function (req, res) {
-    console.log("receibing participant data" + req.body);
+
+    console.log("receiving participant data" + req.body);
     var mysql = req.app.get('mysql');
     console.log(req.body);
     var sql = "INSERT INTO participant(firstName, lastName, email) VALUES (?,?,?)";
@@ -108,7 +109,7 @@ app.post('/participant', function (req, res) {
         }else{
             //res.redirect('/people');
             console.log(results);
-            res.send(true);
+            res.send();
         }
     });
 });
@@ -116,6 +117,7 @@ app.post('/participant', function (req, res) {
 
 
 app.post('/participantHackathon', function(req, res){
+    var context = {};
     console.log("We get the multi-select certificate dropdown as ", req.body.hid);
     var mysql = req.app.get('mysql');
     // let's get out the certificates from the array that was submitted by the form
@@ -126,7 +128,7 @@ app.post('/participantHackathon', function(req, res){
     var inserts = [participant, hackathon];
     sql = mysql.query(sql, inserts, function(error, results, fields){
         if(error){
-            //TODO: send error messages to frontend as the following doesn't work
+            context.insertMessage = results;
             console.log(error)
         }
     });

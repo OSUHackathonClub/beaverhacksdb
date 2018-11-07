@@ -28,6 +28,7 @@ function addParticipant(formData) {
     let newIndex = table.rows.length;
     const participant = new Participant(formData.firstName, formData.lastName, formData.email);
     createRow(participant, newIndex);
+    return false;
 }
 
 
