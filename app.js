@@ -7,7 +7,7 @@ var bodyParser = require('body-parser');
 
 
 app.use(bodyParser.json()); // for parsing application/json
-app.use(bodyParser.urlencoded({extended: true }));
+app.use(bodyParser.urlencoded({extended: false }));
 app.use(express.static('public'));
 
 app.engine('handlebars', handlebars.engine);
@@ -102,7 +102,7 @@ app.post('/participant', function (req, res) {
     console.log(req.body);
     var sql = "INSERT INTO participant(firstName, lastName, email) VALUES (?,?,?)";
     var inserts = [req.body.firstName, req.body.lastName, req.body.email];
-    sql = mysql.query(sql,inserts,function(error, results, fields){
+    sql = mysql.pool.query(sql,inserts,function(error, results, fields){
         if(error){
             res.write(JSON.stringify(error));
             res.end();
