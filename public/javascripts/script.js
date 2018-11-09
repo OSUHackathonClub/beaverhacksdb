@@ -8,7 +8,7 @@ var currentHackathonParticipants = [];
 
 var modal = document.getElementById('update-modal');
 
-//document.addEventListener('DOMContentLoaded', configureCurrentHackathon(currentHackathon));
+
 
 /** Binding event for on forms and loading table **/
 //bindSubmitButton();
@@ -36,7 +36,7 @@ function bindSubmitButton() {
 }
 const button = document.getElementById("submit-participant-button");
 console.log("binding button");
-button.addEventListener('click', function(e) {
+button.addEventListener('click', function(event) {
     console.log('add participant button was clicked');
     event.preventDefault();
     //validate name
