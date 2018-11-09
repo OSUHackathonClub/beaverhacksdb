@@ -33,7 +33,7 @@ app.get('/reset-participant',function(req,res,next){
             "    PRIMARY KEY (id)\n" +
             ") ENGINE=InnoDB;";
         mysql.pool.query(createString, function(err){
-            context.results = "Table reset";
+            context.status = "Table Participants Created";
             res.render('registration',context);
         })
     });
