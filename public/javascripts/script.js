@@ -2,15 +2,19 @@
 
 // is current hackathon an attribute? how do we make it persist
 
-
+console.log('Client-side code running');
 
 var currentHackathonParticipants = [];
 
 var modal = document.getElementById('update-modal');
 
-document.addEventListener('DOMContentLoaded', configureCurrentHackathon(currentHackathon));
+//document.addEventListener('DOMContentLoaded', configureCurrentHackathon(currentHackathon));
 
-document.addEventListener('DOMContentLoaded', bindModalElements);
+/** Binding event for on forms and loading table **/
+//bindSubmitButton();
+
+//document.addEventListener("DONContentLoaded", bindSubmitButton);
+//document.addEventListener('DOMContentLoaded', bindModalElements);
 
 //document.addEventListener('DOMContentLoaded', bindButtons);
 
@@ -22,16 +26,78 @@ class Participant {
     }
 }
 
+/** Button for adding new participant to databas and table **/
+// code inspired by https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch
+
+function bindSubmitButton() {
+
+    console.log("and me?")
+
+}
+const button = document.getElementById("submit-participant-button");
+console.log("binding button");
+button.addEventListener('click', function(e) {
+    console.log('add participant button was clicked');
+    event.preventDefault();
+    //validate name
+    if (document.getElementById("participantFirstName").value === "") {
+        alert("Please include the first name of the participant");
+        return false;
+    }
+    if (document.getElementById("participantLastName").value === "") {
+        alert("Please include the last name of the participant");
+        return false;
+    }
+    if (document.getElementById("participantEmail").value === "") {
+        alert("Please provide a valid email");
+        return false;
+    }
+
+    var payload = new Headers();
+    payload.append("fName", document.getElementById("participantFirstName").value);
+    payload.append("lName", document.getElementById("participantLastName").value);
+    payload.append("email", document.getElementById("participantEmail").value);
+
+    console.log("ready for request");
+    fetch('/insert', {method: 'GET', headers: payload})
+        .then(function(response) {
+            if(response.ok) {
+                console.log('data was loaded to database');
+
+                return response.json();
+
+            }
+            throw new Error('Request failed.');
+        }).then(function (jsonObject) {
+        console.log(jsonObject);
+        //add to table
+        //createRow(jsonObject['response']);
+        displayNewParticpant(jsonObject['response'])
+
+
+    }).catch(function(error) {
+        console.log(error);
+    });
+})
+
+/** Dislay participant after response from the datbase**/
+
+function displayNewParticpant(jsonObject) {
+    addParticipant(jsonObject['response']);
+
+}
+
 function addParticipant(formData) {
-    console.log("submit add participant button clicked");
+    console.log("adding participant button clicked");
     let table = document.getElementById('participant-table-body');
     let newIndex = table.rows.length;
     const participant = new Participant(formData.firstName, formData.lastName, formData.email);
     createRow(participant, newIndex);
-    return false;
+    //return false;
 }
 
 
+/** Code for loading current hackathon **/
 
 function configureCurrentHackathon(currentHackathon) {
     let list = document.getElementById('participant-list');
@@ -43,6 +109,7 @@ function configureCurrentHackathon(currentHackathon) {
 }
 
 
+/** Initial loading of data to participant table **/
 function populateParticipantTable(participantsList) {
     let table = document.getElementById('participant-table-body');
     let count = table.rows.length;
@@ -52,6 +119,8 @@ function populateParticipantTable(participantsList) {
     });
 }
 
+
+/** create row for table **/
 function createRow(participant, index) {
     let table = document.getElementById('participant-table-body');
     let row = document.createElement('tr');
@@ -100,6 +169,7 @@ function deleteRelationship(id) {
 }
 
 
+/** Modal view for updating participant **/
 
 function openUpdateModal(target) {
     // Get the modal
@@ -121,8 +191,24 @@ function bindModalElements() {
     }
 }
 
-function getFormData() {
 
+function parseDataFromParticipantForm(formId) {
+    event.preventDefault();
+    let formData = document.getElementById(formId);
+
+    var participantData = [];
+    for(let i = 0; i <= 4; i++) {
+        participantData.push(formData[i].value);
+    }
+
+    return participantData;
+}
+
+
+function getFormData() {
+    //addToParticipanTable("participant-update-form");
+    var participantData = parseDataFromParticipantForm("participant-update-form")
+    /*
     let formData = document.getElementById("participant-update-form");
 
     var participantData = [];
@@ -134,6 +220,8 @@ function getFormData() {
     //updateRow(id, firstName, lastName, email);
     updateRow(participantData);
     event.preventDefault();
+    */
+    updateRow(participantData);
     closeUpdateView();
 }
 

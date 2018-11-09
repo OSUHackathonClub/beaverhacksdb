@@ -58,6 +58,31 @@ td {
 
 }
 
+#floating\ row {
+  height: 1px;
+}
+
+a {
+  color: #777777;
+}
+
+
+
+.participant-table th {
+  background-color: #f4a07c;
+  color: whitesmoke;
+
+  margin-left: -1em;
+}
+
+.participant-table td {
+  white-space:nowrap;
+  width: inherit;
+  color: #ffb190;
+  align-content: center;
+}
+
+
 /* Registration Form */
 .registration-form .form-group  .cancel-edit-button {
   visibility: hidden;
@@ -115,6 +140,32 @@ td {
 }
 
 a {
-  color: #00B7FF;
+  color: #333333;
 }
 
+.input {
+  width: 400%;
+  padding-left: 8px;
+  align-content: center;
+}
+
+
+.form-group .participant-input {
+
+  width: 120%;
+  padding-left: 8px;
+  align-content: center;
+}
+
+#submit-participant-button {
+  background-color: whitesmoke;
+  border-color: #f4a07c;
+  color: #ffb190;
+  width: 12em;
+}
+
+#editButton {
+  background-color: whitesmoke;
+  border-color: #f4a07c;
+  color: #ffb190;
+}
